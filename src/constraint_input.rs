@@ -37,14 +37,18 @@ pub fn variable_input(properties: &Props) -> Html {
                 for variables.iter().enumerate().map(|(i, v)| {
                     html! {
                         <>
-                            <input type="text" oninput={oninputs[i].clone()}/>
-                            {v}{if i < variables.len() -1 {" + "} else { " " }}
+                            <strong>
+                                <input type="text" oninput={oninputs[i].clone()}/>
+                                {" "}{v}{if i < variables.len() -1 {" + "} else { " " }}
+                            </strong>
                         </>
                     }
                 })
             }
-            {"≤"}
+            <strong>
+            {" ≤ "}
             <input type="text" oninput={oninputs.last().unwrap().clone()}/>
+            </strong>
         </>
     }
 }

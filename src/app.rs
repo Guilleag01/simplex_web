@@ -15,6 +15,7 @@ pub struct App {
     simplex: Simplex,
     solution: Option<f32>,
     final_values: Vec<(String, f32)>,
+    theme: String,
 }
 
 pub enum Msg {
@@ -26,6 +27,7 @@ pub enum Msg {
     AddConstraint,
     ClearConstraints,
     RunSimplex,
+    ChangeTheme,
 }
 
 impl App {}
@@ -39,6 +41,7 @@ impl Default for App {
             simplex: Default::default(),
             solution: None,
             final_values: Default::default(),
+            theme: Default::default(),
         }
     }
 }
@@ -129,6 +132,13 @@ impl Component for App {
                 self.solution = Some(sol);
                 self.final_values = values;
             }
+            Msg::ChangeTheme => {
+                if self.theme == "" {
+                    self.theme = "dark-theme".to_string()
+                } else {
+                    self.theme = "".to_string()
+                }
+            }
         }
         true
     }
@@ -142,19 +152,28 @@ impl Component for App {
         let clear_constraint = ctx.link().callback(|_| Msg::ClearConstraints);
         let add_constraint = ctx.link().callback(|_| Msg::AddConstraint);
         let run_simplex = ctx.link().callback(|_| Msg::RunSimplex);
+        let change_theme = ctx.link().callback(|_| Msg::ChangeTheme);
 
         html! {
+        <div class={format!("big-container {}", self.theme)}>
+        // <button onclick={change_theme}>{"Add"}</button>
+        <header class="header">
+            <h1>{"Simplex optimizer"}</h1>
+            <button onclick={change_theme} id="theme-toggle" class="theme-btn" title="Toggle Dark/Light Mode">
+            { if self.theme == "".to_string() { "🌙" } else { "☀️" } }
+            </button>
+        </header>
         <div class="container">
 
         //   <!-- Top: Input Section -->
-          <div class="input-section">
+        <div class="input-section">
 
-            // <!-- Left: Variables & Constraints -->
-            <div class="input-box">
-            <h2>{"Inputs"}</h2>
+        // <!-- Left: Variables & Constraints -->
+        <div class="input-box">
+        <h2>{"Inputs"}</h2>
 
-            //   <!-- Variables -->
-              <div class="sub-section">
+        //   <!-- Variables -->
+        <div class="sub-section">
                 <h3>{"Variables"}</h3>
                 <div class="input-row">
 
@@ -185,7 +204,8 @@ impl Component for App {
                     {
                         for self.simplex.get_constraints().iter().map(|c| {
                             html! {
-                                <li>{
+                                <li>
+                                {
                                     for zip(c, self.simplex.get_variables()).take(c.len() - 1).enumerate().map(|(i, (v, var))| {
                                         let v_2 = if i > 0 { v.abs() } else { *v };
                                         html! {
@@ -193,6 +213,7 @@ impl Component for App {
                                         }
                                     }
                                 )}
+
                                 {
                                     format!(" ≤ {}", c[c.len() - 1])
                                 }
@@ -250,6 +271,7 @@ impl Component for App {
             </div>
           </div>
 
+        </div>
         </div>
           }
     }

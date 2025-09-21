@@ -1,10 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simplex Optimizer</title>
   <style>
+    /* --- Light Theme (default) --- */
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    .big-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      /* ensures container is at least full viewport height */
+    }
+
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -12,6 +28,38 @@
       flex-direction: column;
       height: 100vh;
       background: #f8f9fa;
+      color: #212529;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #dee2e6;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #212529;
+    }
+
+    /* Theme toggle button */
+    .theme-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .theme-btn:hover {
+      transform: rotate(20deg);
     }
 
     .container {
@@ -28,6 +76,7 @@
       gap: 20px;
       background: #ffffff;
       border-bottom: 2px solid #dee2e6;
+      transition: background 0.3s, border-color 0.3s;
     }
 
     .input-box {
@@ -37,14 +86,16 @@
       background: #f1f3f5;
       border-radius: 10px;
       padding: 15px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
       overflow-y: auto;
+      transition: background 0.3s;
     }
 
     .input-box h2 {
       margin: 0 0 10px 0;
       font-size: 1.2rem;
       color: #343a40;
+      transition: color 0.3s;
     }
 
     .sub-section {
@@ -55,6 +106,7 @@
       margin: 0 0 8px 0;
       font-size: 1rem;
       color: #495057;
+      transition: color 0.3s;
     }
 
     .input-row {
@@ -69,6 +121,9 @@
       border: 1px solid #ced4da;
       border-radius: 5px;
       font-size: 0.9rem;
+      background: #ffffff;
+      color: #212529;
+      transition: background 0.3s, color 0.3s, border-color 0.3s;
     }
 
     .input-row button {
@@ -79,6 +134,7 @@
       border-radius: 5px;
       cursor: pointer;
       font-size: 0.9rem;
+      transition: background 0.3s;
     }
 
     .input-row button:hover {
@@ -101,6 +157,7 @@
       border: 1px solid #dee2e6;
       border-radius: 5px;
       font-size: 0.9rem;
+      transition: background 0.3s, border-color 0.3s, color 0.3s;
     }
 
     .remove-btn {
@@ -111,6 +168,7 @@
       font-size: 0.75rem;
       border-radius: 4px;
       cursor: pointer;
+      transition: background 0.3s;
     }
 
     .remove-btn:hover {
@@ -131,6 +189,9 @@
       border: 1px solid #ced4da;
       border-radius: 5px;
       font-size: 0.9rem;
+      background: #ffffff;
+      color: #212529;
+      transition: background 0.3s, color 0.3s, border-color 0.3s;
     }
 
     .objective button {
@@ -141,6 +202,7 @@
       border-radius: 5px;
       cursor: pointer;
       font-size: 0.95rem;
+      transition: background 0.3s;
     }
 
     .objective button:hover {
@@ -155,6 +217,7 @@
       padding: 20px;
       background: #fdfdfd;
       overflow-y: auto;
+      transition: background 0.3s;
     }
 
     .steps {
@@ -165,11 +228,13 @@
       border: 1px solid #dee2e6;
       border-radius: 8px;
       margin-bottom: 15px;
+      transition: background 0.3s, border-color 0.3s;
     }
 
     .steps h3 {
       margin-top: 0;
       color: #495057;
+      transition: color 0.3s;
     }
 
     .steps ul {
@@ -183,15 +248,105 @@
       border-radius: 8px;
       font-weight: bold;
       color: #155724;
+      transition: background 0.3s, color 0.3s, border-color 0.3s;
+    }
+
+    /* --- Dark Theme --- */
+    .big-container.dark-theme {
+      background: #121212;
+      color: #e9ecef;
+    }
+
+    .big-container.dark-theme .header {
+      background: #1e1e1e;
+      border-bottom: 1px solid #343a40;
+    }
+
+    .big-container.dark-theme .header h1 {
+      color: #f8f9fa;
+    }
+
+
+    .big-container.dark-theme .input-section {
+      background: #1e1e1e;
+      border-bottom: 2px solid #343a40;
+    }
+
+    .big-container.dark-theme .input-box {
+      background: #2a2a2a;
+    }
+
+    .big-container.dark-theme .input-box h2,
+    .big-container.dark-theme .sub-section h3 {
+      color: #f8f9fa;
+    }
+
+    .big-container.dark-theme .input-row input,
+    .big-container.dark-theme .objective input {
+      background: #343a40;
+      color: #e9ecef;
+      border: 1px solid #495057;
+    }
+
+    .big-container.dark-theme li {
+      background: #1e1e1e;
+      border: 1px solid #495057;
+      color: #e9ecef;
+    }
+
+    .big-container.dark-theme .output-section {
+      background: #1a1a1a;
+    }
+
+    .big-container.dark-theme .steps {
+      background: #2a2a2a;
+      border: 1px solid #495057;
+    }
+
+    .big-container.dark-theme .steps h3 {
+      color: #f8f9fa;
+    }
+
+    .big-container.dark-theme .final-result {
+      background: #1e3d2d;
+      border: 1px solid #155724;
+      color: #a8e6a3;
+    }
+
+    .big-container.dark-theme .input-row button {
+      background: #0d6efd;
+    }
+
+    .big-container.dark-theme .input-row button:hover {
+      background: #084298;
+    }
+
+    .big-container.dark-theme .objective button {
+      background: #198754;
+    }
+
+    .big-container.dark-theme .objective button:hover {
+      background: #145c32;
+    }
+
+    .big-container.dark-theme .remove-btn {
+      background: #dc3545;
+    }
+
+    .big-container.dark-theme .remove-btn:hover {
+      background: #b02a37;
     }
   </style>
-<link rel="modulepreload" href="/simplex_web-8bf72546f0e8aebd.js" crossorigin="anonymous" integrity="sha384-x4nFKfiSWzB0sCXnR6hQoO3c8Lv83ztLT8H6Lf0vfHMtRqYUsNign5AzLC+tCans"><link rel="preload" href="/simplex_web-8bf72546f0e8aebd_bg.wasm" crossorigin="anonymous" integrity="sha384-AGnm5INB9StBmD88/MSZ4spWf1Mkktyx60q0tH9gpQto4jlI9JqVHktjhhBfORAV" as="fetch" type="application/wasm"></head>
+
+<link rel="modulepreload" href="/simplex_web-c17f0d3b3483d1df.js" crossorigin="anonymous" integrity="sha384-N6NbmI2kXhtLKxU84HCP168wd/JaKiw9gvaTItFQ73ibm8plWJNvdpDLLXdRWPXp"><link rel="preload" href="/simplex_web-c17f0d3b3483d1df_bg.wasm" crossorigin="anonymous" integrity="sha384-3HZCB6oIMDFCv9h2J2OUGzBwI1zybrRD7BgPyGTDAFMv1FD8m8p2/25UfdwG3mYx" as="fetch" type="application/wasm"></head>
+
+
 <body>
- 
+
 
 <script type="module">
-import init, * as bindings from '/simplex_web-8bf72546f0e8aebd.js';
-const wasm = await init({ module_or_path: '/simplex_web-8bf72546f0e8aebd_bg.wasm' });
+import init, * as bindings from '/simplex_web-c17f0d3b3483d1df.js';
+const wasm = await init({ module_or_path: '/simplex_web-c17f0d3b3483d1df_bg.wasm' });
 
 
 window.wasmBindings = bindings;
@@ -329,4 +484,5 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
 
 })()
 </script></body>
+
 </html>
