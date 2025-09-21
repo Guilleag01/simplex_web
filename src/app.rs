@@ -159,6 +159,19 @@ impl Component for App {
         // <button onclick={change_theme}>{"Add"}</button>
         <header class="header">
             <h1>{"Simplex optimizer"}</h1>
+            // <div>
+            //     {"Source in "}
+            //     <a href="https://github.com/Guilleag01/simplex_web">{"github"}</a>
+            // </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+            <span><b>{"Source in"}</b></span>
+            <a href="https://github.com/Guilleag01/simplex_web" target="_blank">
+                <img src={if self.theme == "" {"img/GitHub_Invertocat_Dark.svg"} else {"img/GitHub_Invertocat_Light.svg"}}
+                    alt="GitHub Logo"
+                    style="width: 24px; height: 24px;"/>
+            </a>
+            </div>
+
             <button onclick={change_theme} id="theme-toggle" class="theme-btn" title="Toggle Dark/Light Mode">
             { if self.theme == "".to_string() { "🌙" } else { "☀️" } }
             </button>
@@ -269,8 +282,8 @@ impl Component for App {
                     }
                 }
             </div>
-          </div>
 
+          </div>
         </div>
         </div>
           }
